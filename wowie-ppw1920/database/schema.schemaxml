@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8" collation="utf8_general_ci">simplebank_db</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="account" view="standard">
+<left>47</left>
+<top>7</top>
+<width>211</width>
+<height>183</height>
+<sql_create_table>CREATE TABLE `account` (
+  `username` char(16) NOT NULL,
+  `token` char(40) NOT NULL,
+  `full_name` varchar(40) NOT NULL,
+  `balance` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `address` varchar(100) DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`username`),
+  UNIQUE KEY `token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="transaction" view="standard">
+<left>464</left>
+<top>9</top>
+<width>209</width>
+<height>192</height>
+<sql_create_table>CREATE TABLE `transaction` (
+  `id` char(40) NOT NULL,
+  `sender` char(16) NOT NULL,
+  `recipient` char(16) NOT NULL,
+  `amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `notes` varchar(40) DEFAULT NULL,
+  `status` char(20) NOT NULL DEFAULT 'success',
+  `issued_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `from` (`sender`),
+  KEY `recipient` (`recipient`),
+  CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`sender`) REFERENCES `account` (`username`),
+  CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`recipient`) REFERENCES `account` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
