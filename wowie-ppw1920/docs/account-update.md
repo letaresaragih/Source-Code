@@ -1,18 +1,18 @@
-﻿# Update Account API
+﻿# Modify Profile API
 
-Fitur ini digunakan untuk mengubah sebagian dari detil informasi rekening (*account*) nasabah. Detil yang dapat dimodifikasi antara lain *address*, *phone*, dan *email*, selain itu tidak diizinkan.
+Fitur ini digunakan untuk mengubah sebagian dari detil informasi profile user. Detil yang dapat dimodifikasi antara lain *name*, *birth*, *address*, *phone*, dan *email*
 
 **URI Pattern**:
 ```
-PATCH /accounts
+PATCH /customers/{id}/edit-profile
 ```
 
 **Request Requirements**:
-Setiap *request* harus menyertakan *authorization token* dari rekening yang ingin dimodifikasi detil informasinya dan sebuah *payload* dalam format JSON. *Payload* berisi detil data yang akan dimodifikasi.
+Setiap *request* harus menyertakan *authorization credential* dari profile yang ingin dimodifikasi detil informasinya dan sebuah *payload* dalam format JSON. *Payload* berisi detil data yang akan dimodifikasi.
 
 Berikut ini adalah contoh sebuah *request* yang valid:
 ```
-PATCH http://localhost/accounts HTTP/1.1
+PATCH http://localhost/customers/{id}/edit-profile
 Accept-Encoding: gzip,deflate
 Authorization: Bearer Q7YHVDU5BQUkAfax1fcTEEGtu1O4L4hM1idBKKtF
 Content-Type: application/json
@@ -32,38 +32,22 @@ User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
 
 **Response**:
 *Response* diberikan dalam format JSON dengan ketentuan sebagai berikut:
-- Jika *authorization token* tidak valid, maka akan dikembalikan pesan kesalahan (401).
-- Sebaliknya (200), ketika *authorization token* valid dan operasi modifikasi berjalan dengan baik, maka akan dikembalikan detil informasi *account* yang baru.
+- Jika *authorization credential* tidak valid, maka akan dikembalikan pesan kesalahan (403).
+- Sebaliknya (200), ketika *authorization credential* valid dan operasi modifikasi berjalan dengan baik, maka akan dikembalikan detil informasi *profile* yang baru.
 
 Berikut ini adalah contoh *response* yang diberikan ketika *authorization token* valid dengan modifikasi dilakukan pada atribut *address* dan *phone*.
 ```
-HTTP/1.1 200 OK
-Host: localhost
-Date: Mon, 06 Jan 2020 02:23:23 GMT
-Connection: close
-X-Powered-By: PHP/7.3.8
-Cache-Control: no-cache, private
-Date: Mon, 06 Jan 2020 02:23:23 GMT
+HTTP 200 OK
+Allow: OPTIONS, PATCH, GET
 Content-Type: application/json
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, PATCH, DELETE
-Access-Control-Allow-Credentials: true
-Access-Control-Max-Age: 86400
-Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With
+Vary: Accept
 
 {
-   "code": 200,
-   "message": "success",
-   "data":    {
-      "username": "wirosableng",
-      "full_name": "Wiro Sableng",
-      "balance": "969.70",
-      "address": "Jl. Dunia Persilatan No. 99",
-      "phone": "085262211213",
-      "email": "wiro@sigurita.com",
-      "account_uri": "/accounts/wirosableng",
-      "transactions_uri": "/transactions"
-   }
+    "id": 1,
+    "name": "Jennie Baik Sekali",
+    "birth": "2000-09-24",
+    "email": "jenniebaik@gmail.com",
+    "address": "Tebing Tinggi, Sumatera Utara",
+    "phone_number": "081233127865"
 }
-
 ```
